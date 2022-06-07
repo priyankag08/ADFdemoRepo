@@ -1,0 +1,9 @@
+{
+	"name": "githubdemobypriya",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e464830d-3408-4199-86b4-13886b4a82dd",
+		"tenantId": "57084445-e440-441f-bc3f-fabe8cbb2535"
+	}
+}
