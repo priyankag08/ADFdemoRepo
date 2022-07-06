@@ -26,8 +26,29 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
+		"concurrency": 1,
+		"variables": {
+			"B1_DomainName": {
+				"type": "String"
+			},
+			"B1_ServerName": {
+				"type": "String"
+			},
+			"B1_UserName": {
+				"type": "String"
+			},
+			"B1_Password": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-07-05T12:17:06Z"
 	},
