@@ -22,7 +22,7 @@
 			"connectionString": "Integrated Security=False;Data Source=@{linkedService().ServerName};Initial Catalog=ADFDB;User ID=@{linkedService().UserName};Password=@{linkedService().Password}"
 		},
 		"connectVia": {
-			"referenceName": "SelfHostedIntegrationRuntime",
+			"referenceName": "Self-Hosted-IR",
 			"type": "IntegrationRuntimeReference"
 		}
 	}
