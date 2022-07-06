@@ -5,10 +5,10 @@
 		"factoryName": {
 			"value": "adfsyncproject"
 		},
-		"SqlServerLS_connectionString": {
+		"AzureSqlDatabase_LS_connectionString": {
 			"value": ""
 		},
-		"AzureSqlDatabase_LS_connectionString": {
+		"SqlServerLS_connectionString": {
 			"value": ""
 		},
 		"Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId": {
