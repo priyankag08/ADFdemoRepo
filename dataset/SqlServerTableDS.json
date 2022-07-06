@@ -1,0 +1,21 @@
+{
+	"name": "SqlServerTableDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServerLS",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ServerName": "AZ-VDI-D1-267",
+				"UserName": "sa",
+				"Password": "sa@123"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DesignSyncProcessQueue"
+		}
+	}
+}
