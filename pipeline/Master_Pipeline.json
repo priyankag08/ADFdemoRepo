@@ -1,60 +1,6 @@
 {
 	"name": "Master_Pipeline",
 	"properties": {
-		"activities": [
-			{
-				"name": "Lookup_To_Data_From_SP",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderStoredProcedureName": "[dbo].[SP_Get_Queued_Or_Failed_Record]",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "SqlServerTableDS",
-						"type": "DatasetReference"
-					}
-				}
-			},
-			{
-				"name": "If Condition1",
-				"type": "IfCondition",
-				"dependsOn": [
-					{
-						"activity": "Lookup_To_Data_From_SP",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				]
-			}
-		],
-		"concurrency": 1,
-		"variables": {
-			"B1_DomainName": {
-				"type": "String"
-			},
-			"B1_ServerName": {
-				"type": "String"
-			},
-			"B1_UserName": {
-				"type": "String"
-			},
-			"B1_Password": {
-				"type": "String"
-			}
-		},
 		"annotations": [],
 		"lastPublishTime": "2022-07-05T12:17:06Z"
 	},
