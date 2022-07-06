@@ -30,8 +30,21 @@
 			{
 				"name": "If Condition1",
 				"type": "IfCondition",
-				"dependsOn": [],
-				"userProperties": []
+				"dependsOn": [
+					{
+						"activity": "Lookup_To_Data_From_SP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Lookup_To_Data_From_SP').outputactivity('Lookup_To_Data_From_SP').output.count",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"concurrency": 1,
