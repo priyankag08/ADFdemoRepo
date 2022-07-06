@@ -1,0 +1,29 @@
+{
+	"name": "SqlServerLS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"ServerName": {
+				"type": "String",
+				"defaultValue": "AZ-VDI-D1-267"
+			},
+			"UserName": {
+				"type": "String",
+				"defaultValue": "sa"
+			},
+			"Password": {
+				"type": "String",
+				"defaultValue": "sa@123"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Data Source=@{linkedService().ServerName};Initial Catalog=ADFDB;User ID=@{linkedService().UserName};Password=@{linkedService().Password}"
+		},
+		"connectVia": {
+			"referenceName": "SelfHostedIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

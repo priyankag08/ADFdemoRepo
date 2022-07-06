@@ -1,0 +1,9 @@
+{
+	"name": "adfsyncproject",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "029d84c1-7561-4541-ba70-915d9b747462",
+		"tenantId": "57084445-e440-441f-bc3f-fabe8cbb2535"
+	}
+}
