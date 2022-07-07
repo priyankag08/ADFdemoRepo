@@ -95,6 +95,22 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Type",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"cases": [
+						{
+							"value": "Case1"
+						},
+						{
+							"value": "Case2"
+						}
+					]
+				}
 			}
 		],
 		"variables": {
