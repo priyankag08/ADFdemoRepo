@@ -38,7 +38,13 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].QueueID",
+						"type": "Expression"
+					}
+				}
 			},
 			{
 				"name": "Client_Connection_String",
