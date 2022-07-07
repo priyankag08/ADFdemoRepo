@@ -26,8 +26,74 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": []
+			},
+			{
+				"name": "Client_Connection_String",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"cases": [
+						{
+							"value": "Case1",
+							"activities": [
+								{
+									"name": "B1_ClientServerName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B1_ServerName",
+										"value": "mysimplify.database.windows.net"
+									}
+								},
+								{
+									"name": "B1_ClientUserName",
+									"description": "",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B1_UserName",
+										"value": "priyankag08"
+									}
+								},
+								{
+									"name": "B1_ClientPassword",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B1_Password",
+										"value": "Pravin@123"
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
+		"variables": {
+			"B1_ServerName": {
+				"type": "String"
+			},
+			"B1_DomainName": {
+				"type": "String"
+			},
+			"B1_UserName": {
+				"type": "String"
+			},
+			"B1_Password": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-07-05T12:17:06Z"
 	},
