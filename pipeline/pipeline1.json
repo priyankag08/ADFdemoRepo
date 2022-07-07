@@ -23,7 +23,6 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "Set Identity_insert ui.FormDesign On\nSet Identity_insert ui.FormDesignVersion On\nSet Identity_insert ui.FormDesignType on\nSet Identity_insert ui.FormDesignGroup On\nSet Identity_insert ui.FormDesignGroupMapping On\nSet Identity_insert ui.FormDesignMapping on\nSet Identity_insert ui.DocumentRule on\nSet Identity_insert ui.DocumentRuleEventMap on",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
