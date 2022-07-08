@@ -71,7 +71,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].TenantID",
+						"value": "@activity('LookupTo_Get_SP_OP').output.value[0].TenantID",
 						"type": "Expression"
 					},
 					"cases": [
