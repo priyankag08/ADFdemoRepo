@@ -158,7 +158,7 @@
 						"upsertSettings": {
 							"useTempDB": true,
 							"keys": [
-								"DocumentRuleID"
+								"DocumentRuleEventMapID"
 							]
 						},
 						"sqlWriterUseTableLock": false,
