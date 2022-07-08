@@ -3,41 +3,9 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup_To_Get_SP-OP",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderStoredProcedureName": "[dbo].[SP_Get_Queued_Or_Failed_Record]",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "SqlServerTableDS",
-						"type": "DatasetReference"
-					}
-				}
-			},
-			{
 				"name": "If_DataPresent_Or_Not",
 				"type": "IfCondition",
-				"dependsOn": [
-					{
-						"activity": "Lookup_To_Get_SP-OP",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
@@ -284,6 +252,31 @@
 							]
 						}
 					]
+				}
+			},
+			{
+				"name": "LookupTo_Get_SP_OP",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderStoredProcedureName": "[dbo].[SP_Get_Queued_Or_Failed_Record]",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SqlServerTableDS",
+						"type": "DatasetReference"
+					}
 				}
 			}
 		],
