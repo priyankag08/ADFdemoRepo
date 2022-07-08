@@ -166,19 +166,6 @@
 									}
 								},
 								{
-									"name": "B2_ClientUserName",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "B2_UserName",
-										"value": {
-											"value": "@variables('Client_ServerName_V')",
-											"type": "Expression"
-										}
-									}
-								},
-								{
 									"name": "B2_ClientPassword",
 									"type": "SetVariable",
 									"dependsOn": [],
@@ -200,6 +187,19 @@
 										"variableName": "B2_DBName",
 										"value": {
 											"value": "@variables('Client_DBName_V')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "B2_ClientUserName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B2_UserName",
+										"value": {
+											"value": "@variables('Cleint_UserName_V')",
 											"type": "Expression"
 										}
 									}
@@ -300,6 +300,9 @@
 				"type": "String"
 			},
 			"B2_DBName": {
+				"type": "String"
+			},
+			"B2_UserName": {
 				"type": "String"
 			}
 		},
