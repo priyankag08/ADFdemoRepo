@@ -109,7 +109,7 @@
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "B1_ServerName",
+										"variableName": "Client_ServerName_V",
 										"value": "mysimplify.database.windows.net"
 									}
 								},
@@ -120,7 +120,7 @@
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "B1_UserName",
+										"variableName": "Cleint_UserName_V",
 										"value": "priyankag08"
 									}
 								},
@@ -225,11 +225,22 @@
 									}
 								},
 								{
-									"name": "Execute Pipeline1",
+									"name": "ExecuteDesignVersionPipl",
 									"type": "ExecutePipeline",
-									"dependsOn": [],
+									"dependsOn": [
+										{
+											"activity": "Execute_Pipl_For_ED",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
 									"userProperties": [],
 									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Full_DesignVersion",
+											"type": "PipelineReference"
+										},
 										"waitOnCompletion": true
 									}
 								}
@@ -258,16 +269,16 @@
 			}
 		],
 		"variables": {
-			"B1_ServerName": {
+			"Client_ServerName_V": {
 				"type": "String"
 			},
-			"B1_DomainName": {
+			"Client_DBName_V": {
 				"type": "String"
 			},
-			"B1_UserName": {
+			"Cleint_UserName_V": {
 				"type": "String"
 			},
-			"B1_Password": {
+			"Client_Password_V": {
 				"type": "String"
 			},
 			"B1_DBName": {
