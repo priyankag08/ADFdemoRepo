@@ -223,6 +223,15 @@
 										},
 										"waitOnCompletion": true
 									}
+								},
+								{
+									"name": "Execute Pipeline1",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitOnCompletion": true
+									}
 								}
 							]
 						},
