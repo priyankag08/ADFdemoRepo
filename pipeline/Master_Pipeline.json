@@ -5,7 +5,14 @@
 			{
 				"name": "If_DataPresent_Or_Not",
 				"type": "IfCondition",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "LookupTo_Get_SP_OP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
