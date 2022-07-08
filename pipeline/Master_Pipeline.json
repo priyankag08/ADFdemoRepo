@@ -156,7 +156,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_ServerName",
-										"value": ""
+										"value": "AZ-VDI-D1-267"
 									}
 								},
 								{
@@ -166,7 +166,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_UserName",
-										"value": ""
+										"value": "sa"
 									}
 								},
 								{
@@ -186,7 +186,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_DBName",
-										"value": ""
+										"value": "ADFDB"
 									}
 								}
 							]
