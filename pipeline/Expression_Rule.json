@@ -24,7 +24,10 @@
 						"type": "AzureSqlSink",
 						"writeBehavior": "upsert",
 						"upsertSettings": {
-							"useTempDB": true
+							"useTempDB": true,
+							"keys": [
+								"DocumentRuleID"
+							]
 						},
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -117,6 +120,9 @@
 				"type": "String"
 			},
 			"B2_DBName": {
+				"type": "String"
+			},
+			"B1_DBName": {
 				"type": "String"
 			}
 		},
