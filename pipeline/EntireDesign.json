@@ -78,6 +78,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@activity('Copy_FormDesign').output.value[0].FormDesignTypeID",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -311,11 +315,6 @@
 			},
 			"ServerName_P": {
 				"type": "string"
-			}
-		},
-		"variables": {
-			"B1_DBName": {
-				"type": "String"
 			}
 		},
 		"annotations": []
