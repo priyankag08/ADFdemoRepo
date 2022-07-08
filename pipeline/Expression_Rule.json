@@ -110,19 +110,19 @@
 			}
 		],
 		"variables": {
-			"B2_ServerName": {
-				"type": "String"
-			},
-			"B2_UserName": {
-				"type": "String"
-			},
-			"B2_Password": {
+			"B1_DBName": {
 				"type": "String"
 			},
 			"B2_DBName": {
 				"type": "String"
 			},
-			"B1_DBName": {
+			"B2_UserName": {
+				"type": "String"
+			},
+			"B2_ServerName": {
+				"type": "String"
+			},
+			"B2_Password": {
 				"type": "String"
 			}
 		},
