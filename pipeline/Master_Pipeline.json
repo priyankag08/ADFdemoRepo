@@ -222,6 +222,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"on": {
+						"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].Type",
+						"type": "Expression"
+					},
 					"cases": [
 						{
 							"value": "Type1_Entire-Design",
