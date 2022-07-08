@@ -207,7 +207,7 @@
 						"upsertSettings": {
 							"useTempDB": true,
 							"keys": {
-								"value": "@activity('Copy_FormDesignMapping').output.value[0].FormDesignID",
+								"value": "@activity('Copy_FormDesignMapping').output.value[0].FormDesignGroupMappingID",
 								"type": "Expression"
 							}
 						},
@@ -267,9 +267,10 @@
 						"writeBehavior": "upsert",
 						"upsertSettings": {
 							"useTempDB": true,
-							"keys": [
-								""
-							]
+							"keys": {
+								"value": "@activity('Copy_FormDesignGroup').output.value[0].FormDesignMapping",
+								"type": "Expression"
+							}
 						},
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
