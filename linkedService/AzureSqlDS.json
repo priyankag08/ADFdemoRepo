@@ -1,0 +1,16 @@
+{
+	"name": "AzureSqlDS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=AZ-VDI-D1-267;initial catalog=ADFDB;user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4YmE1YTBiOS00ZTRhLTRkYzYtODZhMy0yODEzZTBiM2U5MWQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "Self-Hosted-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
