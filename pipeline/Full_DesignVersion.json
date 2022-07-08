@@ -17,6 +17,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@concat('select * from ui.FormDesignVersion where FormdesignID')",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -171,6 +175,14 @@
 				]
 			}
 		],
+		"parameters": {
+			"FormDesignID": {
+				"type": "string"
+			},
+			"FormDesignVersionID": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"B1_DBName": {
 				"type": "String"
