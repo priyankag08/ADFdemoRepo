@@ -171,7 +171,7 @@
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "B2_UserName",
+										"variableName": "B1_UserName",
 										"value": {
 											"value": "@variables('Cleint_UserName_V')",
 											"type": "Expression"
