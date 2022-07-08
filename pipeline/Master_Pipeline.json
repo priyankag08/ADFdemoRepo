@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(activity('Lookup_To_Get_SP-OP').output.count,0 )",
+						"value": "@greater(activity('LookupTo_Get_SP_OP').output.count,0 )",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
