@@ -113,16 +113,13 @@
 			"B1_DBName": {
 				"type": "String"
 			},
-			"B2_DBName": {
+			"B1_UserName": {
 				"type": "String"
 			},
-			"B2_UserName": {
+			"B1_ServerName": {
 				"type": "String"
 			},
-			"B2_ServerName": {
-				"type": "String"
-			},
-			"B2_Password": {
+			"B1_Password": {
 				"type": "String"
 			}
 		},
