@@ -146,7 +146,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "@concat(select * from [UI].DocumentRuleEventMap where DocumentRuleID in (select DocumentRuleID from [UI].DocumentRule where FormDesignID =', pipeline().parameters.FormDesignID'  and FormDesignVersionID =', pipeline().parameters.FormDesignVersionID'))",
+							"value": "@concat('select * from [UI].DocumentRuleEventMap where DocumentRuleID in (select DocumentRuleID from [UI].DocumentRule where FormDesignID =,'  , pipeline().parameters.FormDesignID, ' and FormDesignVersionID =', pipeline().parameters.FormDesignVersionID)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
