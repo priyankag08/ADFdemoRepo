@@ -209,7 +209,7 @@
 				"typeProperties": {
 					"cases": [
 						{
-							"value": "Case1",
+							"value": "Type1_Entire-Design",
 							"activities": [
 								{
 									"name": "Execute_Pipl_For_ED",
