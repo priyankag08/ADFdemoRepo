@@ -150,7 +150,7 @@
 						"upsertSettings": {
 							"useTempDB": true,
 							"keys": [
-								""
+								"FormDesignGroupID"
 							]
 						},
 						"sqlWriterUseTableLock": false,
