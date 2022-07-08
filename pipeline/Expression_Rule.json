@@ -106,6 +106,20 @@
 				]
 			}
 		],
+		"variables": {
+			"B2_ServerName": {
+				"type": "String"
+			},
+			"B2_UserName": {
+				"type": "String"
+			},
+			"B2_Password": {
+				"type": "String"
+			},
+			"B2_DBName": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
