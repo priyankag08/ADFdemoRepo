@@ -280,6 +280,32 @@
 				"type": "string"
 			}
 		},
+		"variables": {
+			"B1_ServerName": {
+				"type": "String"
+			},
+			"B1_DBName": {
+				"type": "String"
+			},
+			"B2_ServerName": {
+				"type": "String"
+			},
+			"B2_UserName": {
+				"type": "String"
+			},
+			"B2_Password": {
+				"type": "String"
+			},
+			"B2_DBName": {
+				"type": "String"
+			},
+			"B1_UserName": {
+				"type": "String"
+			},
+			"B1_Password": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
