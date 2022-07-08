@@ -227,7 +227,22 @@
 							]
 						},
 						{
-							"value": "Case2"
+							"value": "Case2",
+							"activities": [
+								{
+									"name": "Execute_Pipl_FOR_FDV",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Full_DesignVersion",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true
+									}
+								}
+							]
 						}
 					]
 				}
