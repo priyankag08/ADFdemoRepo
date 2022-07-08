@@ -147,7 +147,7 @@
 							]
 						},
 						{
-							"value": "Case2",
+							"value": "B2_Client",
 							"activities": [
 								{
 									"name": "B2_ClientServerName",
