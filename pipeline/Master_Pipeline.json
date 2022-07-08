@@ -41,9 +41,45 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].QueueID",
+						"value": "@greater(activity('Lookup_To_Get_SP-OP').output.count,0 )",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Sp_To changestatusToInProgress",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[SP_ChangeStatusTo_InProgress]",
+								"storedProcedureParameters": {
+									"QID": {
+										"value": {
+											"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].QueueID",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "SqlServerLS",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"ServerName": "AZ-VDI-D1-267",
+									"UserName": "sa",
+									"Password": "sa@123"
+								}
+							}
+						}
+					]
 				}
 			},
 			{
