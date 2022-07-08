@@ -178,14 +178,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Master_Pipeline')]",
+			"name": "[concat(parameters('factoryName'), '/EntireDesign')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup_To_Get_SP-OP",
-						"type": "Lookup",
+						"name": "Copy_FormDesign",
+						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -198,23 +198,52 @@
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource",
-								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
-							"dataset": {
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"FormDesignId"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
 								"referenceName": "SqlServerTableDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
-						}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					},
 					{
-						"name": "Copy",
+						"name": "Copy_FormDesignType",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Lookup_To_Get_SP-OP",
+								"activity": "Copy_FormDesign",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -231,7 +260,10 @@
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource",
-								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
+								"sqlReaderQuery": {
+									"value": "@activity('Copy_FormDesign').output.value[0].FormDesignTypeID",
+									"type": "Expression"
+								},
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -241,7 +273,432 @@
 								"upsertSettings": {
 									"useTempDB": true,
 									"keys": [
-										"QueueID"
+										"Type"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_FormDesignGroup",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_FormDesignType",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"FormDesignGroupID"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_FormDesignGroupMapping",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_FormDesignMapping",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": {
+										"value": "@activity('Copy_FormDesignMapping').output.value[0].FormDesignGroupMappingID",
+										"type": "Expression"
+									}
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_FormDesignMapping",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_FormDesignGroup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": {
+										"value": "@activity('Copy_FormDesignGroup').output.value[0].FormDesignMapping",
+										"type": "Expression"
+									}
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"DBName_P": {
+						"type": "string"
+					},
+					"UserName_P": {
+						"type": "string"
+					},
+					"Password_P": {
+						"type": "string"
+					},
+					"ServerName_P": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"B2_DBName": {
+						"type": "String"
+					},
+					"B2_UserName": {
+						"type": "String"
+					},
+					"B2_ServerName": {
+						"type": "String"
+					},
+					"B2_Password": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Full_DesignVersion')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_FormDesignVersion",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@concat('select * from ui.FormDesignVersion where FormdesignID=',pipeline().parameters.FormDesignID,' and FormDesignVersionID=' ,pipeline().parameters.FormDesignVersionID)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"FormDesignVersionId"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_DocumentRule",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_FormDesignVersion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@concat('select * from ui.DocumentRule where FormdesignID=',pipeline().parameters.FormDesignID,' and FormDesignVersionID=' ,pipeline().parameters.FormDesignVersionID)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"DocumentRuleID"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CopyDocumentRuleEventMap",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_DocumentRule",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@concat('select * from [UI].DocumentRuleEventMap where DocumentRuleID in (select DocumentRuleID from [UI].DocumentRule where FormDesignID =,'  , pipeline().parameters.FormDesignID, ' and FormDesignVersionID =', pipeline().parameters.FormDesignVersionID)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"DocumentRuleEventMapID"
 									]
 								},
 								"sqlWriterUseTableLock": false,
@@ -277,12 +734,525 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"FormDesignID": {
+						"type": "string"
+					},
+					"FormDesignVersionID": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"B1_DBName": {
+						"type": "String"
+					},
+					"B2_ServerName": {
+						"type": "String"
+					},
+					"B2_UserName": {
+						"type": "String"
+					},
+					"B2_Password": {
+						"type": "String"
+					},
+					"B2_DBName": {
+						"type": "String"
+					},
+					"B1_UserName": {
+						"type": "String"
+					},
+					"B1_Password": {
+						"type": "String"
+					},
+					"B1_ServerName": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Expression_Rule')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_DocumentRule",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"DocumentRuleID"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CopyDocumentRuleEventMap",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_DocumentRule",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"B1_DBName": {
+						"type": "String"
+					},
+					"B1_UserName": {
+						"type": "String"
+					},
+					"B1_ServerName": {
+						"type": "String"
+					},
+					"B1_Password": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Master_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_To_Get_SP-OP",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "If_DataPresent_Or_Not",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Lookup_To_Get_SP-OP",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('Lookup_To_Get_SP-OP').output.count,0 )",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Sp_To changestatusToInProgress",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[SP_ChangeStatusTo_InProgress]",
+										"storedProcedureParameters": {
+											"QID": {
+												"value": {
+													"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].QueueID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "SqlServerLS",
+										"type": "LinkedServiceReference",
+										"parameters": {
+											"ServerName": "AZ-VDI-D1-267",
+											"UserName": "sa",
+											"Password": "sa@123"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Client_Connection_String",
+						"type": "Switch",
+						"dependsOn": [
+							{
+								"activity": "If_DataPresent_Or_Not",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].TenantID",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "B1_Client",
+									"activities": [
+										{
+											"name": "B1_ClientServerName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Client_ServerName_V",
+												"value": "mysimplify.database.windows.net"
+											}
+										},
+										{
+											"name": "B1_ClientUserName",
+											"description": "",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Cleint_UserName_V",
+												"value": "priyankag08"
+											}
+										},
+										{
+											"name": "B1_ClientPassword",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Client_Password_V",
+												"value": "Pravin@123"
+											}
+										},
+										{
+											"name": "B1_ClientDBName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B1_DBName",
+												"value": {
+													"value": "@variables('Client_DBName_V')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"value": "B2_Client",
+									"activities": [
+										{
+											"name": "B2_ClientDBName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_DBName",
+												"value": {
+													"value": "@variables('Client_DBName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientUserName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B1_UserName",
+												"value": {
+													"value": "@variables('Cleint_UserName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientServerName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_ServerName",
+												"value": {
+													"value": "@variables('Client_ServerName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientPassword",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_Password",
+												"value": {
+													"value": "@variables('Client_Password_V')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Type",
+						"type": "Switch",
+						"dependsOn": [
+							{
+								"activity": "Client_Connection_String",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].Type",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "Type1_Entire-Design",
+									"activities": [
+										{
+											"name": "Execute_Pipl_For_ED",
+											"type": "ExecutePipeline",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "EntireDesign",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										},
+										{
+											"name": "ExecuteDesignVersionPipl",
+											"type": "ExecutePipeline",
+											"dependsOn": [
+												{
+													"activity": "Execute_Pipl_For_ED",
+													"dependencyConditions": [
+														"Succeeded"
+													]
+												}
+											],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "Full_DesignVersion",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										}
+									]
+								},
+								{
+									"value": "Case2",
+									"activities": [
+										{
+											"name": "Execute_Pipl_FOR_FDV",
+											"type": "ExecutePipeline",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "Full_DesignVersion",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Client_ServerName_V": {
+						"type": "String"
+					},
+					"Client_DBName_V": {
+						"type": "String"
+					},
+					"Cleint_UserName_V": {
+						"type": "String"
+					},
+					"Client_Password_V": {
+						"type": "String"
+					},
+					"B1_DBName": {
+						"type": "String"
+					},
+					"B2_DBName": {
+						"type": "String"
+					},
+					"B2_UserName": {
+						"type": "String"
+					},
+					"B2_ServerName": {
+						"type": "String"
+					},
+					"B2_Password": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-05T12:17:06Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+				"[concat(variables('factoryId'), '/linkedServices/SqlServerLS')]",
+				"[concat(variables('factoryId'), '/pipelines/EntireDesign')]",
+				"[concat(variables('factoryId'), '/pipelines/Full_DesignVersion')]"
 			]
 		}
 	]
