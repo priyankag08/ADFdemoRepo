@@ -185,7 +185,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_Password",
-										"value": "sa@123"
+										"value": {
+											"value": "@variables('Client_Password_V')",
+											"type": "Expression"
+										}
 									}
 								},
 								{
@@ -195,7 +198,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_DBName",
-										"value": "ADFDB"
+										"value": {
+											"value": "@variables('Client_DBName_V')",
+											"type": "Expression"
+										}
 									}
 								}
 							]

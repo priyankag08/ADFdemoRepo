@@ -265,7 +265,10 @@
 						"type": "AzureSqlSink",
 						"writeBehavior": "upsert",
 						"upsertSettings": {
-							"useTempDB": true
+							"useTempDB": true,
+							"keys": [
+								""
+							]
 						},
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -306,6 +309,11 @@
 			},
 			"ServerName_P": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"B1_DBName": {
+				"type": "String"
 			}
 		},
 		"annotations": []
