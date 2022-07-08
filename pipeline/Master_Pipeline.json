@@ -283,7 +283,8 @@
 					"dataset": {
 						"referenceName": "SqlServerTableDS",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
