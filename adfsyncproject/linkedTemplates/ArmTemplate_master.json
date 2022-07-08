@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlServerLS'"
 		},
+		"SqlServer_Target_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer_Target'"
+		},
 		"Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/22a805df-4191-445f-befe-b715f2eba430/resourcegroups/Priya/providers/Microsoft.DataFactory/factories/ADFDemobyPriya/integrationruntimes/SelfHostedIR"
@@ -46,11 +50,14 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureSqlDatabase_LS_connectionString": {
+						"value": "[parameters('AzureSqlDatabase_LS_connectionString')]"
+					},
 					"SqlServerLS_connectionString": {
 						"value": "[parameters('SqlServerLS_connectionString')]"
 					},
-					"AzureSqlDatabase_LS_connectionString": {
-						"value": "[parameters('AzureSqlDatabase_LS_connectionString')]"
+					"SqlServer_Target_connectionString": {
+						"value": "[parameters('SqlServer_Target_connectionString')]"
 					},
 					"Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId')]"

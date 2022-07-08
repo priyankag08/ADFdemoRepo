@@ -11,6 +11,9 @@
 		"SqlServerLS_connectionString": {
 			"value": ""
 		},
+		"SqlServer_Target_connectionString": {
+			"value": ""
+		},
 		"Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId": {
 			"value": "/subscriptions/22a805df-4191-445f-befe-b715f2eba430/resourcegroups/Priya/providers/Microsoft.DataFactory/factories/ADFDemobyPriya/integrationruntimes/SelfHostedIR"
 		},

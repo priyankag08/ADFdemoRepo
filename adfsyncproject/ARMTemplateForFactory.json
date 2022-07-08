@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlServerLS'"
 		},
+		"SqlServer_Target_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer_Target'"
+		},
 		"Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/22a805df-4191-445f-befe-b715f2eba430/resourcegroups/Priya/providers/Microsoft.DataFactory/factories/ADFDemobyPriya/integrationruntimes/SelfHostedIR"
@@ -24,497 +28,6 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/Master_Pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "If_DataPresent_Or_Not",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "LookupTo_Get_SP_OP",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@greater(activity('LookupTo_Get_SP_OP').output.count,0 )",
-								"type": "Expression"
-							},
-							"ifTrueActivities": [
-								{
-									"name": "Sp_To changestatusToInProgress",
-									"type": "SqlServerStoredProcedure",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"storedProcedureName": "[[dbo].[SP_ChangeStatusTo_InProgress]",
-										"storedProcedureParameters": {
-											"QID": {
-												"value": {
-													"value": "@activity('LookupTo_Get_SP_OP').output.value[0].QueueID",
-													"type": "Expression"
-												},
-												"type": "Int32"
-											}
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "SqlServerLS",
-										"type": "LinkedServiceReference",
-										"parameters": {
-											"ServerName": "AZ-VDI-D1-267",
-											"UserName": "sa",
-											"Password": "sa@123"
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "Client_Connection_String",
-						"type": "Switch",
-						"dependsOn": [
-							{
-								"activity": "If_DataPresent_Or_Not",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"on": {
-								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].TenantID",
-								"type": "Expression"
-							},
-							"cases": [
-								{
-									"value": "B1_Client",
-									"activities": [
-										{
-											"name": "B1_ClientServerName",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "Client_ServerName_V",
-												"value": "mysimplify.database.windows.net"
-											}
-										},
-										{
-											"name": "B1_ClientUserName",
-											"description": "",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "Cleint_UserName_V",
-												"value": "priyankag08"
-											}
-										},
-										{
-											"name": "B1_ClientPassword",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "Client_Password_V",
-												"value": "Pravin@123"
-											}
-										},
-										{
-											"name": "B1_ClientDBName",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "B1_DBName",
-												"value": {
-													"value": "@variables('Client_DBName_V')",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								},
-								{
-									"value": "B2_Client",
-									"activities": [
-										{
-											"name": "B2_ClientDBName",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "B2_DBName",
-												"value": {
-													"value": "@variables('Client_DBName_V')",
-													"type": "Expression"
-												}
-											}
-										},
-										{
-											"name": "B2_ClientUserName",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "B1_UserName",
-												"value": {
-													"value": "@variables('Cleint_UserName_V')",
-													"type": "Expression"
-												}
-											}
-										},
-										{
-											"name": "B2_ClientServerName",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "B2_ServerName",
-												"value": {
-													"value": "@variables('Client_ServerName_V')",
-													"type": "Expression"
-												}
-											}
-										},
-										{
-											"name": "B2_ClientPassword",
-											"type": "SetVariable",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"variableName": "B2_Password",
-												"value": {
-													"value": "@variables('Client_Password_V')",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "Type",
-						"type": "Switch",
-						"dependsOn": [
-							{
-								"activity": "Client_Connection_String",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"on": {
-								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].Type",
-								"type": "Expression"
-							},
-							"cases": [
-								{
-									"value": "Type1_Entire-Design",
-									"activities": [
-										{
-											"name": "Execute_Pipl_For_ED",
-											"type": "ExecutePipeline",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"pipeline": {
-													"referenceName": "EntireDesign",
-													"type": "PipelineReference"
-												},
-												"waitOnCompletion": true,
-												"parameters": {}
-											}
-										},
-										{
-											"name": "ExecuteDesignVersionPipl",
-											"type": "ExecutePipeline",
-											"dependsOn": [
-												{
-													"activity": "Execute_Pipl_For_ED",
-													"dependencyConditions": [
-														"Succeeded"
-													]
-												}
-											],
-											"userProperties": [],
-											"typeProperties": {
-												"pipeline": {
-													"referenceName": "Full_DesignVersion",
-													"type": "PipelineReference"
-												},
-												"waitOnCompletion": true,
-												"parameters": {}
-											}
-										}
-									]
-								},
-								{
-									"value": "Case2",
-									"activities": [
-										{
-											"name": "Execute_Pipl_FOR_FDV",
-											"type": "ExecutePipeline",
-											"dependsOn": [],
-											"userProperties": [],
-											"typeProperties": {
-												"pipeline": {
-													"referenceName": "Full_DesignVersion",
-													"type": "PipelineReference"
-												},
-												"waitOnCompletion": true,
-												"parameters": {}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "LookupTo_Get_SP_OP",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "SqlServerTableDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"Client_ServerName_V": {
-						"type": "String"
-					},
-					"Client_DBName_V": {
-						"type": "String"
-					},
-					"Cleint_UserName_V": {
-						"type": "String"
-					},
-					"Client_Password_V": {
-						"type": "String"
-					},
-					"B1_DBName": {
-						"type": "String"
-					},
-					"B2_DBName": {
-						"type": "String"
-					},
-					"B2_UserName": {
-						"type": "String"
-					},
-					"B2_ServerName": {
-						"type": "String"
-					},
-					"B2_Password": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-07-05T12:17:06Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
-				"[concat(variables('factoryId'), '/linkedServices/SqlServerLS')]",
-				"[concat(variables('factoryId'), '/pipelines/EntireDesign')]",
-				"[concat(variables('factoryId'), '/pipelines/Full_DesignVersion')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlTableDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase_LS",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "QueueID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FormDesignId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FormDesignVersionId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ExpressionRule",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "TenantId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "QueueStatus",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "IsActive",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "IsRequeued",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Type",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Client_DesignSyncProcessQueue"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase_LS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SqlServerTableDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SqlServerLS",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ServerName": "AZ-VDI-D1-267",
-						"UserName": "sa",
-						"Password": "sa@123"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "DesignSyncProcessQueue"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SqlServerLS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase_LS')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureSqlDatabase_LS_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "Self-Hosted-IR",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/Self-Hosted-IR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SqlServerLS')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"ServerName": {
-						"type": "String",
-						"defaultValue": "AZ-VDI-D1-267"
-					},
-					"UserName": {
-						"type": "String",
-						"defaultValue": "sa"
-					},
-					"Password": {
-						"type": "String",
-						"defaultValue": "sa@123"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('SqlServerLS_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Self-Hosted-IR')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {
-					"linkedInfo": {
-						"resourceId": "[parameters('Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId')]",
-						"authorizationType": "Rbac"
-					}
-				}
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/EntireDesign')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -849,17 +362,145 @@
 						"type": "string"
 					}
 				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Expression_Rule')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_DocumentRule",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"DocumentRuleID"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CopyDocumentRuleEventMap",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_DocumentRule",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"variables": {
-					"B2_DBName": {
+					"B1_DBName": {
 						"type": "String"
 					},
-					"B2_UserName": {
+					"B1_UserName": {
 						"type": "String"
 					},
-					"B2_ServerName": {
+					"B1_ServerName": {
 						"type": "String"
 					},
-					"B2_Password": {
+					"B1_Password": {
 						"type": "String"
 					}
 				},
@@ -1114,14 +755,276 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Expression_Rule')]",
+			"name": "[concat(parameters('factoryName'), '/Master_Pipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_DocumentRule",
-						"type": "Copy",
+						"name": "If_DataPresent_Or_Not",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "LookupTo_Get_SP_OP",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('LookupTo_Get_SP_OP').output.count,0 )",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Sp_To changestatusToInProgress",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[SP_ChangeStatusTo_InProgress]",
+										"storedProcedureParameters": {
+											"QID": {
+												"value": {
+													"value": "@activity('LookupTo_Get_SP_OP').output.value[0].QueueID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "SqlServerLS",
+										"type": "LinkedServiceReference",
+										"parameters": {
+											"ServerName": "AZ-VDI-D1-267",
+											"UserName": "sa",
+											"Password": "sa@123"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Client_Connection_String",
+						"type": "Switch",
+						"dependsOn": [
+							{
+								"activity": "If_DataPresent_Or_Not",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].TenantID",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "B1_Client",
+									"activities": [
+										{
+											"name": "B1_ClientServerName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Client_ServerName_V",
+												"value": "mysimplify.database.windows.net"
+											}
+										},
+										{
+											"name": "B1_ClientUserName",
+											"description": "",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Cleint_UserName_V",
+												"value": "priyankag08"
+											}
+										},
+										{
+											"name": "B1_ClientPassword",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "Client_Password_V",
+												"value": "Pravin@123"
+											}
+										},
+										{
+											"name": "B1_ClientDBName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B1_DBName",
+												"value": {
+													"value": "@variables('Client_DBName_V')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"value": "B2_Client",
+									"activities": [
+										{
+											"name": "B2_ClientDBName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_DBName",
+												"value": {
+													"value": "@variables('Client_DBName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientUserName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_UserName",
+												"value": {
+													"value": "@variables('Cleint_UserName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientServerName",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_ServerName",
+												"value": {
+													"value": "@variables('Client_ServerName_V')",
+													"type": "Expression"
+												}
+											}
+										},
+										{
+											"name": "B2_ClientPassword",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "B2_Password",
+												"value": {
+													"value": "@variables('Client_Password_V')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Type",
+						"type": "Switch",
+						"dependsOn": [
+							{
+								"activity": "Client_Connection_String",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].Type",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "Type1_Entire-Design",
+									"activities": [
+										{
+											"name": "Execute_Pipl_For_ED",
+											"type": "ExecutePipeline",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "EntireDesign",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										},
+										{
+											"name": "ExecuteDesignVersionPipl",
+											"type": "ExecutePipeline",
+											"dependsOn": [
+												{
+													"activity": "Execute_Pipl_For_ED",
+													"dependencyConditions": [
+														"Succeeded"
+													]
+												}
+											],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "Full_DesignVersion",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										}
+									]
+								},
+								{
+									"value": "Case2",
+									"activities": [
+										{
+											"name": "Execute_Pipl_FOR_FDV",
+											"type": "ExecutePipeline",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "Full_DesignVersion",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "LookupTo_Get_SP_OP",
+						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -1134,100 +1037,16 @@
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "upsert",
-								"upsertSettings": {
-									"useTempDB": true,
-									"keys": [
-										"DocumentRuleID"
-									]
-								},
-								"sqlWriterUseTableLock": false,
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
+							"dataset": {
 								"referenceName": "SqlServerTableDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSqlTableDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "CopyDocumentRuleEventMap",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Copy_DocumentRule",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "SqlServerTableDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSqlTableDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
+						}
 					}
 				],
 				"policy": {
@@ -1235,25 +1054,221 @@
 					"cancelAfter": {}
 				},
 				"variables": {
+					"Client_ServerName_V": {
+						"type": "String"
+					},
+					"Client_DBName_V": {
+						"type": "String"
+					},
+					"Cleint_UserName_V": {
+						"type": "String"
+					},
+					"Client_Password_V": {
+						"type": "String"
+					},
 					"B1_DBName": {
 						"type": "String"
 					},
-					"B1_UserName": {
+					"B2_DBName": {
 						"type": "String"
 					},
-					"B1_ServerName": {
+					"B2_UserName": {
 						"type": "String"
 					},
-					"B1_Password": {
+					"B2_ServerName": {
+						"type": "String"
+					},
+					"B2_Password": {
 						"type": "String"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2022-07-05T12:17:06Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServerTableDS')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDS')]"
+				"[concat(variables('factoryId'), '/linkedServices/SqlServerLS')]",
+				"[concat(variables('factoryId'), '/pipelines/EntireDesign')]",
+				"[concat(variables('factoryId'), '/pipelines/Full_DesignVersion')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTableDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "QueueID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FormDesignId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FormDesignVersionId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ExpressionRule",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TenantId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "QueueStatus",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsActive",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsRequeued",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Type",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Client_DesignSyncProcessQueue"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerTableDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServerLS",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ServerName": "AZ-VDI-D1-267",
+						"UserName": "sa",
+						"Password": "sa@123"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DesignSyncProcessQueue"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServerLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase_LS_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "Self-Hosted-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Self-Hosted-IR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"ServerName": {
+						"type": "String",
+						"defaultValue": "AZ-VDI-D1-267"
+					},
+					"UserName": {
+						"type": "String",
+						"defaultValue": "sa"
+					},
+					"Password": {
+						"type": "String",
+						"defaultValue": "sa@123"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerLS_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "Self-Hosted-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Self-Hosted-IR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer_Target')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer_Target_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "Self-Hosted-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Self-Hosted-IR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Self-Hosted-IR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {
+					"linkedInfo": {
+						"resourceId": "[parameters('Self-Hosted-IR_properties_typeProperties_linkedInfo_resourceId')]",
+						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }
