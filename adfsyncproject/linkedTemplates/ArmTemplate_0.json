@@ -924,37 +924,11 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup_To_Get_SP-OP",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "SqlServerTableDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
 						"name": "If_DataPresent_Or_Not",
 						"type": "IfCondition",
 						"dependsOn": [
 							{
-								"activity": "Lookup_To_Get_SP-OP",
+								"activity": "LookupTo_Get_SP_OP",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -963,7 +937,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@greater(activity('Lookup_To_Get_SP-OP').output.count,0 )",
+								"value": "@greater(activity('LookupTo_Get_SP_OP').output.count,0 )",
 								"type": "Expression"
 							},
 							"ifTrueActivities": [
@@ -984,7 +958,7 @@
 										"storedProcedureParameters": {
 											"QID": {
 												"value": {
-													"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].QueueID",
+													"value": "@activity('LookupTo_Get_SP_OP').output.value[0].QueueID",
 													"type": "Expression"
 												},
 												"type": "Int32"
@@ -1018,7 +992,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"on": {
-								"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].TenantID",
+								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].TenantID",
 								"type": "Expression"
 							},
 							"cases": [
@@ -1145,7 +1119,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"on": {
-								"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].Type",
+								"value": "@activity('LookupTo_Get_SP_OP').output.value[0].Type",
 								"type": "Expression"
 							},
 							"cases": [
@@ -1209,6 +1183,32 @@
 									]
 								}
 							]
+						}
+					},
+					{
+						"name": "LookupTo_Get_SP_OP",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[SP_Get_Queued_Or_Failed_Record]",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTableDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
 						}
 					}
 				],
