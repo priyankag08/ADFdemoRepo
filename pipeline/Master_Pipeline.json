@@ -93,6 +93,16 @@
 										"variableName": "B1_Password",
 										"value": "Pravin@123"
 									}
+								},
+								{
+									"name": "B1_ClientDBName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B1_DBName",
+										"value": "Target_DB"
+									}
 								}
 							]
 						},
@@ -194,6 +204,9 @@
 				"type": "String"
 			},
 			"B1_Password": {
+				"type": "String"
+			},
+			"B1_DBName": {
 				"type": "String"
 			}
 		},
