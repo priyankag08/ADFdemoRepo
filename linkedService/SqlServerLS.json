@@ -20,6 +20,10 @@
 		"type": "SqlServer",
 		"typeProperties": {
 			"connectionString": "Integrated Security=False;Data Source=@{linkedService().ServerName};Initial Catalog=ADFDB;User ID=@{linkedService().UserName};Password=@{linkedService().Password}"
+		},
+		"connectVia": {
+			"referenceName": "Self-Hosted-IR",
+			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
