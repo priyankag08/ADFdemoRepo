@@ -95,9 +95,13 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"on": {
+						"value": "@activity('Lookup_To_Get_SP-OP').output.value[0].TenantID",
+						"type": "Expression"
+					},
 					"cases": [
 						{
-							"value": "Case1",
+							"value": "B1_Client",
 							"activities": [
 								{
 									"name": "B1_ClientServerName",
