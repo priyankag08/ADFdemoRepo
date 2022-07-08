@@ -141,7 +141,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B1_DBName",
-										"value": "Target_DB"
+										"value": "B1_ClientDB"
 									}
 								}
 							]
