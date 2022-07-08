@@ -212,7 +212,7 @@
 							"value": "Case1",
 							"activities": [
 								{
-									"name": "Execute Pipeline1",
+									"name": "Execute_Pipl_For_ED",
 									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"userProperties": [],
