@@ -1,0 +1,12 @@
+{
+	"name": "SqlServerTarget_DS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServer_Target",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
