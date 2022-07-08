@@ -28,7 +28,7 @@
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "If_DataPresent_Or_Not",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -87,7 +87,7 @@
 				"type": "Switch",
 				"dependsOn": [
 					{
-						"activity": "If Condition1",
+						"activity": "If_DataPresent_Or_Not",
 						"dependencyConditions": [
 							"Succeeded"
 						]
