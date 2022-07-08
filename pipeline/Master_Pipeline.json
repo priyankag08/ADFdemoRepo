@@ -153,19 +153,6 @@
 							"value": "B2_Client",
 							"activities": [
 								{
-									"name": "B2_ClientPassword",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "B2_Password",
-										"value": {
-											"value": "@variables('Client_Password_V')",
-											"type": "Expression"
-										}
-									}
-								},
-								{
 									"name": "B2_ClientDBName",
 									"type": "SetVariable",
 									"dependsOn": [],
@@ -200,6 +187,19 @@
 										"variableName": "B2_ServerName",
 										"value": {
 											"value": "@variables('Client_ServerName_V')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "B2_ClientPassword",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "B2_Password",
+										"value": {
+											"value": "@variables('Client_Password_V')",
 											"type": "Expression"
 										}
 									}
@@ -306,6 +306,9 @@
 				"type": "String"
 			},
 			"B2_ServerName": {
+				"type": "String"
+			},
+			"B2_Password": {
 				"type": "String"
 			}
 		},
