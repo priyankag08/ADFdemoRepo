@@ -141,7 +141,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B1_DBName",
-										"value": "B1_ClientDB"
+										"value": {
+											"value": "@variables('Client_DBName_V')",
+											"type": "Expression"
+										}
 									}
 								}
 							]
@@ -156,7 +159,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_ServerName",
-										"value": "AZ-VDI-D1-267"
+										"value": {
+											"value": "@variables('Client_ServerName_V')",
+											"type": "Expression"
+										}
 									}
 								},
 								{
@@ -166,7 +172,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "B2_UserName",
-										"value": "sa"
+										"value": {
+											"value": "@variables('Cleint_UserName_V')",
+											"type": "Expression"
+										}
 									}
 								},
 								{
@@ -279,6 +288,9 @@
 				"type": "String"
 			},
 			"Client_Password_V": {
+				"type": "String"
+			},
+			"B1_DBName": {
 				"type": "String"
 			}
 		},
