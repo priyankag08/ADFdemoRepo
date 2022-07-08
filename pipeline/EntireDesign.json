@@ -206,9 +206,10 @@
 						"writeBehavior": "upsert",
 						"upsertSettings": {
 							"useTempDB": true,
-							"keys": [
-								""
-							]
+							"keys": {
+								"value": "@activity('Copy_FormDesignMapping').output.value[0].FormDesignID",
+								"type": "Expression"
+							}
 						},
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
